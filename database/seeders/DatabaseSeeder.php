@@ -16,8 +16,8 @@ class DatabaseSeeder extends Seeder
         // Create Default Admin User
         User::create([
             'name' => 'System Admin',
-            'email' => 'complaints@cgcuniversity.in',
-            'password' => Hash::make('Demo@1234!'),
+            'email' => 'admin@example.com',
+            'password' => Hash::make('secret-password-here'),
             'role' => 'admin',
             'status' => 'active',
         ]);
