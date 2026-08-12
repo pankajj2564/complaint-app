@@ -1,8 +1,7 @@
-<?php
-
-use App\Http\Controllers\ProfileController;
+<?php use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Auth\StudentOtpController;
+use App\Http\Controllers\ComplaintController; // <-- Add this import
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -43,12 +42,19 @@ Route::middleware(['auth', 'role:employee'])->group(function () {
 
 
 // ==========================================
-// 4. Student Dashboard Route
+// 4. Student Dashboard & Complaint Routes
 // ==========================================
 Route::middleware(['auth', 'role:student'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    // Complaint Routes for Students
+    Route::get('/complaints/create', [ComplaintController::class, 'create'])->name('complaints.create');
+    Route::post('/complaints', [ComplaintController::class, 'store'])->name('complaints.store');
+    
+    // Dynamic Sub-category AJAX endpoint
+    Route::get('/api/sub-categories/{categoryId}', [ComplaintController::class, 'getSubCategories']);
 });
 
 

@@ -1,7 +1,6 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+<nav x-data="{ open: false }" class="bg-white border-b border-gray-100 h-20"> <!-- Added h-20 here -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full"> <!-- Added h-full to fill the nav -->
+        <div class="flex justify-between h-full">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">

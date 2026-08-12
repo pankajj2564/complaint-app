@@ -46,4 +46,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function studentProfile()
+    {
+        return $this->hasOne(StudentProfile::class, 'user_id'); 
+        // Note: Change 'user_id' to whatever foreign key column links student_profiles to users table
+    }
 }

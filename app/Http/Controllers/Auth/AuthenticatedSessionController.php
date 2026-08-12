@@ -30,24 +30,33 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
-        // Check if user is suspended
+        // 1. Block Students from using this login page
+        if ($user->role === 'student') {
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            
+            return redirect('/student/login')->withErrors(['login_identifier' => 'Students must log in using the Student OTP Portal.']);
+        }
+
+        // 2. Check if user is suspended
         if ($user->status === 'suspended') {
             Auth::guard('web')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
+            
             return redirect('/login')->withErrors(['email' => 'Your account has been suspended. Please contact Admin.']);
         }
 
+        // 3. Redirect Admin and Employee normally
         switch ($user->role) {
             case 'admin':
                 return redirect()->intended(route('admin.dashboard', absolute: false));
             case 'employee':
                 return redirect()->intended(route('employee.dashboard', absolute: false));
-            case 'student':
-                // Students should ideally use OTP login, but if they login here, redirect to their dashboard
-                return redirect()->intended(route('dashboard', absolute: false));
             default:
-                return redirect()->intended(route('dashboard', absolute: false));
+                Auth::guard('web')->logout();
+                return redirect('/student/login')->withErrors(['email' => 'Unauthorized access role.']);
         }
     }
 
