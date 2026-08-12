@@ -76,9 +76,9 @@ class ImportController extends Controller
                             ['user_id' => $user->id],
                             [
                                 'phone_number' => $phone,
-                                'employee_code' => $row[4] ?? null,
-                                'department' => $row[5] ?? null,
-                                'designation' => $row[6] ?? null,
+                                'employee_code' => $row[4] ?? null,                                
+                                'designation' => $row[5] ?? null,
+                                'department' => $row[6] ?? null,
                             ]
                         );
                     }
