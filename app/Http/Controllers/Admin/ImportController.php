@@ -40,9 +40,9 @@ class ImportController extends Controller
                     continue;
                 }
 
-                $name = $row[0] ?? '';
-                $email = $row[1] ?? '';
-                $phone = $row[2] ?? '';
+                $name = $row[1] ?? '';
+                $email = $row[2] ?? '';
+                $phone = $row[3] ?? '';
                 $password = Hash::make('password123'); // Default password
 
                 if (!empty($email)) {
@@ -63,10 +63,10 @@ class ImportController extends Controller
                             ['user_id' => $user->id],
                             [
                                 'phone_number' => $phone,
-                                'roll_number' => $row[3] ?? null,
-                                'gr_number' => $row[4] ?? null,
-                                'course' => $row[5] ?? null,
-                                'school' => $row[6] ?? null,
+                                'roll_number' => $row[4] ?? null,
+                                'gr_number' => $row[5] ?? null,
+                                'course' => $row[6] ?? null,
+                                'school' => $row[7] ?? null,
                             ]
                         );
                     } 
@@ -76,9 +76,9 @@ class ImportController extends Controller
                             ['user_id' => $user->id],
                             [
                                 'phone_number' => $phone,
-                                'employee_code' => $row[3] ?? null,
-                                'department' => $row[4] ?? null,
-                                'designation' => $row[5] ?? null,
+                                'employee_code' => $row[4] ?? null,
+                                'department' => $row[5] ?? null,
+                                'designation' => $row[6] ?? null,
                             ]
                         );
                     }
