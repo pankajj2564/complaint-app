@@ -13,4 +13,9 @@ class EmployeeProfile extends Model
         'department',
         'designation',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

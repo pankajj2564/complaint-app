@@ -65,12 +65,23 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // 1. Logout se pehle user ka role nikal lein
+        $user = Auth::user();
+        $role = $user ? $user->role : null; // Maan lijiye aapke database mein 'role' column hai
+
+        // 2. Standard Laravel Logout Process
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        // 3. Role ke hisaab se redirect condition
+        if ($role === 'admin') {
+            return redirect('/admin/login');
+        } 
+        
+        // Agar student, employee ya koi aur role ho toh yahan aayega
+        return redirect('/auth/login');
     }
 }

@@ -52,4 +52,8 @@ class User extends Authenticatable
         return $this->hasOne(StudentProfile::class, 'user_id'); 
         // Note: Change 'user_id' to whatever foreign key column links student_profiles to users table
     }
+    public function employeeProfile()
+    {
+        return $this->hasOne(EmployeeProfile::class, 'user_id'); // Apne foreign key ke hisab se adjust kar sakte hain
+    }
 }

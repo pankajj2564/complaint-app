@@ -14,6 +14,7 @@ class StudentProfile extends Model
         'phone_number',
         'roll_number',
         'gr_number',
+        'student_type',
         'course',
         'school',
     ];

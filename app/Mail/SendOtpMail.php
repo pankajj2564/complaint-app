@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Address;
 
 class SendOtpMail extends Mailable
 {
@@ -24,7 +25,8 @@ class SendOtpMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'University Portal - Login OTP Verification',
+            subject: 'Login OTP Verification for CGC University Complaint',
+            from: new Address('info@cgcuniversity.in', 'Complaint Portal CGC University Mohali')
         );
     }
 

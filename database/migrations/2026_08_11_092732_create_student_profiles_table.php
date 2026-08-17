@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('gr_number')->unique();
             $table->string('course')->nullable();     // e.g. B.Tech CSE
             $table->string('school')->nullable();     // e.g. School of Engineering
+            $table->string('student_type')->nullable();
             $table->timestamps();
 
             $table->index('roll_number');

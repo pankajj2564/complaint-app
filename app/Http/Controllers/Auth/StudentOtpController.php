@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\VerificationCode;
-use App\Models\StudentProfile;
 use Carbon\Carbon;
 use App\Mail\SendOtpMail;
 use Illuminate\Support\Facades\Mail;
@@ -25,55 +24,55 @@ class StudentOtpController extends Controller
         $request->validate(['login_identifier' => 'required']);
         $input = $request->input('login_identifier');
 
-        $student = User::where('role', 'student')
-            ->where(function($q) use ($input) {
-                $q->where('email', $input)
-                  ->orWhereHas('studentProfile', function($subQ) use ($input) {
-                      $subQ->where('roll_number', $input)
-                            ->orWhere('gr_number', $input)
-                            ->orWhere('phone_number', $input);
-                  });
-            })->first();
+        // User dhoondhein
+        $user = User::where('email', $input)
+            ->orWhereHas('studentProfile', function($q) use ($input) {
+                $q->where('roll_number', $input)->orWhere('gr_number', $input);
+            })
+            ->orWhereHas('employeeProfile', function($q) use ($input) {
+                $q->where('employee_code', $input);
+            })
+            ->first();
 
-        if (!$student) {
-            return back()->withErrors(['login_identifier' => 'No student account found with this information.']);
+        if (!$user) {
+            return back()->withErrors(['login_identifier' => 'No account found with this Email, Roll No, or Employee Code.']);
         }
 
-        if ($student->status === 'suspended') {
+        if (!in_array($user->role, ['student', 'employee'])) {
+            return back()->withErrors(['login_identifier' => 'Unauthorized account type for OTP login.']);
+        }
+
+        if ($user->status === 'suspended') {
             return back()->withErrors(['login_identifier' => 'Your account has been suspended. Please contact Admin.']);
         }
 
         $otp = rand(100000, 999999);
 
+        // FIX: Identifier mein hamesha user ki actual email save karein taaki confusion na ho!
         VerificationCode::updateOrCreate(
-            ['identifier' => $input],
+            ['identifier' => $user->email],
             [
                 'otp' => Hash::make($otp),
                 'expires_at' => Carbon::now()->addMinutes(10)
             ]
         );
 
-        // Mail sending with proper error catch
         try {
-            Mail::to($student->email)->send(new SendOtpMail($otp));
+            Mail::to($user->email)->send(new SendOtpMail($otp));
         } catch (\Exception $e) {
-            // 1. Error ko storage/logs/laravel.log me record karein taaki debugging ho sake
-            \Log::error('OTP Email Sending Error: ' . $e->getMessage());
-
-            // 2. Agar aap chahte hain ki email fail hone par user ko rok dein:
-            // return back()->withErrors(['login_identifier' => 'Failed to send OTP email. Please check configuration or try again.']);
+            \Log::error('OTP Email Error: ' . $e->getMessage());
         }
 
-        // Store session and redirect
-        session(['student_login_identifier' => $input]);
-        session()->flash('debug_otp', $otp); 
+        // Session mein bhi email save karein
+        session(['auth_login_email' => $user->email]);
+        session()->flash('debug_otp', $otp);
 
         return redirect()->route('student.verify.otp.form');
     }
 
     public function showVerifyForm()
     {
-        if (!session()->has('student_login_identifier')) {
+        if (!session()->has('auth_login_email')) {
             return redirect()->route('student.login');
         }
         return view('auth.student-verify');
@@ -83,8 +82,8 @@ class StudentOtpController extends Controller
     {
         $request->validate(['otp' => 'required|numeric']);
         
-        $input = session('student_login_identifier');
-        $verification = VerificationCode::where('identifier', $input)->first();
+        $email = session('auth_login_email');
+        $verification = VerificationCode::where('identifier', $email)->first();
 
         if (!$verification || Carbon::now()->greaterThan($verification->expires_at)) {
             return back()->withErrors(['otp' => 'The OTP has expired or is invalid.']);
@@ -94,20 +93,22 @@ class StudentOtpController extends Controller
             return back()->withErrors(['otp' => 'Incorrect OTP code entered.']);
         }
 
-        $student = User::where('role', 'student')
-            ->where(function($q) use ($input) {
-                $q->where('email', $input)
-                  ->orWhereHas('studentProfile', function($subQ) use ($input) {
-                      $subQ->where('roll_number', $input)
-                            ->orWhere('gr_number', $input)
-                            ->orWhere('phone_number', $input);
-                  });
-            })->first();
+        // Seedha email se user nikal lein kyuki email unique hoti hai
+        $user = User::where('email', $email)->first();
 
-        Auth::login($student);
+        if (!$user) {
+            return redirect()->route('student.login')->withErrors(['login_identifier' => 'User session expired. Please login again.']);
+        }
+
+        Auth::login($user);
         $verification->delete();
-        session()->forget('student_login_identifier');
+        session()->forget('auth_login_email');
 
+        // Role-based redirection
+        if ($user->role === 'employee') {
+            return redirect()->route('employee.dashboard');
+        }
+        
         return redirect()->route('complaints.create');
     }
 }

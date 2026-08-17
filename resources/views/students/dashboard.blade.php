@@ -5,23 +5,23 @@
         <div class="grid grid-cols-1 sm:grid-cols-5 gap-5">
             <div class="bg-white p-5 rounded-2xl shadow-xs border border-gray-100">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Total Complaints</p>
-                <h3 class="text-2xl font-bold text-gray-900 mt-1">{{ $data["totalComplaints"] ?? 0 }}</h3>
+                <h3 class="text-2xl font-bold text-gray-900 mt-1">{{ $data["total"] ?? 0 }}</h3>
             </div>
             <div class="bg-white p-5 rounded-2xl shadow-xs border border-gray-100">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Pending</p>
-                <h3 class="text-2xl font-bold text-amber-600 mt-1">{{ $data["pendingComplaints"] ?? 0 }}</h3>
+                <h3 class="text-2xl font-bold text-amber-600 mt-1">{{ $data["pending"] ?? 0 }}</h3>
             </div>
             <div class="bg-white p-5 rounded-2xl shadow-xs border border-gray-100">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">In Progress</p>
-                <h3 class="text-2xl font-bold text-indigo-600 mt-1">{{ $data["inprogressComplaints"] ?? 0 }}</h3>
+                <h3 class="text-2xl font-bold text-indigo-600 mt-1">{{ $data["inProgress"] ?? 0 }}</h3>
             </div>
             <div class="bg-white p-5 rounded-2xl shadow-xs border border-gray-100">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Resolved</p>
-                <h3 class="text-2xl font-bold text-emerald-600 mt-1">{{ $data["resolvedComplaints"] ?? 0 }}</h3>
+                <h3 class="text-2xl font-bold text-emerald-600 mt-1">{{ $data["resolved"] ?? 0 }}</h3>
             </div>
             <div class="bg-white p-5 rounded-2xl shadow-xs border border-gray-100">
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Closed</p>
-                <h3 class="text-2xl font-bold text-emerald-600 mt-1">{{ $data["closedComplaints"] ?? 0 }}</h3>
+                <h3 class="text-2xl font-bold text-emerald-600 mt-1">{{ $data["closed"] ?? 0 }}</h3>
             </div>
         </div>
 
@@ -91,10 +91,6 @@
                         @endforelse
                     </tbody>
                 </table>
-            </div>
-            <!-- Pagination Links Section -->
-            <div class="mt-4 px-6 py-4">
-                {{ $data["complaints"]->links() }}
             </div>
         </div>
 
