@@ -71,7 +71,7 @@
                             <div class="bg-gray-50 p-4 rounded-lg border">
                                 <h4 class="font-semibold text-indigo-600">For Students:</h4>
                                 <code class="text-xs text-gray-800 block mt-2 bg-white p-2 border rounded">
-                                    Sr. No., Name, Email, Phone Number, Roll Number, GR Number, Course, School
+                                    Sr. No., Name, Email, Phone Number, Roll Number, GR Number, Course, School, Student Type
                                 </code>
                             </div>
 

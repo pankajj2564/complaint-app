@@ -102,4 +102,20 @@ class ComplaintController extends Controller
         $data["closed"] = Complaint::where('user_id', $user->id)->where('status', 'closed')->count();
         return view('students.dashboard', compact('data'));
     }
+
+    public function destroyComplaint($id)
+    {
+        $complaint = Complaint::findOrFail($id);
+        $user = Auth::user();
+
+        // Check if the user is an Admin OR the owner of the complaint
+        if ($user->role !== 'admin' && $complaint->user_id !== $user->id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Perform the deletion
+        $complaint->delete();
+
+        return redirect()->back()->with('success', 'Complaint deleted successfully.');
+    }
 }

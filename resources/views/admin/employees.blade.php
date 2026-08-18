@@ -13,7 +13,7 @@
                         Admin Portal
                     </span>
                     <a href="{{ route('admin.students.create') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150">
-                        + Add Student
+                        + Add Employee
                     </a>
                 </div>
             </div>
@@ -94,12 +94,11 @@
                                     <td class="py-4 px-6 text-gray-500">{{ $employee->created_at->format('d M Y') }} </td>                                   
                                     <td class="py-4 px-6 text-right space-x-2">
                                         <div class="inline-flex items-center gap-2">
-                                            <a href="#" class="px-3 py-1 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-xs font-semibold transition">View</a>
-                                            <a href="#" class="px-3 py-1 bg-amber-50 text-amber-600 hover:bg-amber-100 rounded-lg text-xs font-semibold transition">Edit</a>
-                                            <form action="#" method="POST" class="inline">
+                                            <a href="{{ route('admin.users.edit', $employee->id) }}" class="px-3 py-1 bg-amber-50 text-amber-600 hover:bg-amber-100 rounded-lg text-xs font-semibold transition">Edit</a>
+                                            <form action="{{ route('admin.user_delete', $employee->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="px-3 py-1 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-xs font-semibold transition" onclick="return confirm('Are you sure you want to delete this student?')">Delete</button>
+                                                <button type="submit" class="px-3 py-1 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-xs font-semibold transition" onclick="return confirm('Are you sure you want to delete this record?')">Delete</button>
                                             </form>
                                         </div>
                                     </td>

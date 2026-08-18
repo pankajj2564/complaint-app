@@ -29,6 +29,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     
     // Complaints Management & Assignment
     Route::get('/complaints', [AdminController::class, 'complaints'])->name('complaints');
+    Route::delete('/complaints/delete/{id}', [ComplaintController::class, 'destroyComplaint'])->name('complaints_delete');
     Route::post('/complaints/{id}/assign', [AdminController::class, 'assignComplaint'])->name('complaints.assign');
 
     // Students & Employees Lists
@@ -36,6 +37,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
 
     Route::get('/employees', [AdminController::class, 'employees'])->name('employees');
+    Route::delete('/user/delete/{id}', [AdminController::class, 'destroyUser'])->name('user_delete');
+    Route::get('/users/{id}/edit', [AdminController::class, 'editUser'])->name('users.edit');
+    Route::put('/users/{id}', [AdminController::class, 'updateUser'])->name('users.update');
+    Route::get('/users/{id}', [AdminController::class, 'showUser'])->name('users.show');
     
     // CSV Import Routes
     Route::get('/import', [ImportController::class, 'showImportForm'])->name('import');

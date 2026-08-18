@@ -73,4 +73,79 @@ class AdminController extends Controller
         $employees = User::where('role', 'employee')->with('employeeProfile')->latest()->paginate(10); 
         return view('admin.employees', compact('employees'));
     }
+    public function destroyUser($id)
+    {
+        // Prevent admin from accidentally deleting their own account
+        if (Auth::id() == $id) {
+            return redirect()->back()->with('error', 'You cannot delete your own account.');
+        }
+
+        $user = User::findOrFail($id);
+
+        // Optional: Manually delete profiles if database cascade isn't set up
+        if ($user->studentProfile) {
+            $user->studentProfile()->delete();
+        }
+        if ($user->employeeProfile) {
+            $user->employeeProfile()->delete();
+        }
+
+        // Delete the main user
+        $user->delete();
+
+        return redirect()->back()->with('success', 'User deleted successfully.');
+    }
+    public function showUser($id)
+    {
+        $user = User::with(['studentProfile', 'employeeProfile'])->findOrFail($id);
+        return view('admin.users.show', compact('user'));
+    }
+    public function editUser($id)
+    {
+        $user = User::with(['studentProfile', 'employeeProfile'])->findOrFail($id);
+        return view('admin.users.edit', compact('user'));
+    }
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::with(['studentProfile', 'employeeProfile'])->findOrFail($id);
+
+        // Validate common user fields
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'role' => 'required|in:admin,student,employee',
+            'status' => 'required|string',
+        ]);
+
+        // Update base user details
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'role' => $request->role,
+            'status' => $request->status,
+        ]);
+
+        // Update Profile based on user role
+        if ($user->role === 'student' && $user->studentProfile) {
+            $request->validate([
+                'phone_number' => 'nullable|string|max:20',
+                'roll_number' => 'nullable|string|max:50',
+                'course' => 'nullable|string|max:100',
+            ]);
+            $user->studentProfile()->update($request->only([
+                'phone_number', 'roll_number', 'gr_number', 'student_type', 'course', 'school'
+            ]));
+        } elseif ($user->role === 'employee' && $user->employeeProfile) {
+            $request->validate([
+                'phone_number' => 'nullable|string|max:20',
+                'employee_code' => 'nullable|string|max:50',
+                'department' => 'nullable|string|max:100',
+            ]);
+            $user->employeeProfile()->update($request->only([
+                'phone_number', 'employee_code', 'department', 'designation'
+            ]));
+        }
+
+        return redirect()->route('admin.users.show', $user->id)->with('success', 'User updated successfully.');
+    }
 }

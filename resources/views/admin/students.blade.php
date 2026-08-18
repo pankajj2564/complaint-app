@@ -88,12 +88,11 @@
                                     <td class="py-4 px-6 text-gray-500">{{ $student->studentProfile->phone_number ?? 'N/A' }}</td>
                                     <td class="py-4 px-6 text-right space-x-2">
                                         <div class="inline-flex items-center gap-2">
-                                            <a href="#" class="px-3 py-1 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-xs font-semibold transition">View</a>
-                                            <a href="#" class="px-3 py-1 bg-amber-50 text-amber-600 hover:bg-amber-100 rounded-lg text-xs font-semibold transition">Edit</a>
-                                            <form action="#" method="POST" class="inline">
+                                            <a href="{{ route('admin.users.edit', $student->id) }}" class="px-3 py-1 bg-amber-50 text-amber-600 hover:bg-amber-100 rounded-lg text-xs font-semibold transition">Edit</a>
+                                            <form action="{{ route('admin.user_delete', $student->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="px-3 py-1 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-xs font-semibold transition" onclick="return confirm('Are you sure you want to delete this student?')">Delete</button>
+                                                <button type="submit" class="px-3 py-1 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-xs font-semibold transition" onclick="return confirm('Are you sure you want to delete this record?')">Delete</button>
                                             </form>
                                         </div>
                                     </td>
