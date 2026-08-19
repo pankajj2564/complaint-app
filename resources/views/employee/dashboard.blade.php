@@ -1,7 +1,7 @@
 <x-app-layout>
     <!-- Alpine.js state for Modal -->
     <div class="py-12 bg-gray-50 min-h-screen" x-data="{ openModal: false, activeComplaint: {} }">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 no-print">
             
             <!-- Header Banner -->
             <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -70,11 +70,11 @@
                                 <tr>
                                     <!-- Ticket No (Clickable to open modal directly via Alpine) -->
                                     <td class="py-4 px-6 font-mono font-medium text-indigo-600">
-                                        <button type="button" 
-                                            @click="activeComplaint = {{ json_encode($complaint) }}; openModal = true"
-                                            class="hover:underline text-indigo-600 focus:outline-none">
-                                            {{ $complaint->ticket_number }}
-                                        </button>
+                                    <button type="button" 
+                                        @click="$dispatch('open-complaint-modal', {{ Js::from($complaint) }})"
+                                        class="hover:underline text-indigo-600 focus:outline-none">
+                                        {{ $complaint->ticket_number }}
+                                    </button>
                                     </td>
                                     <td class="py-4 px-6 font-medium text-gray-900">
                                         {{ $complaint->complainant }}
@@ -124,68 +124,7 @@
 
         </div>
 
-        <!-- ================= COMPLAINT DETAILS MODAL ================= -->
-        <div x-show="openModal" 
-             style="display: none;"
-             class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-            
-            <div @click.away="openModal = false" 
-                 class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 relative">
-                
-                <!-- Modal Header -->
-                <div class="flex justify-between items-center pb-4 border-b border-gray-100">
-                    <h3 class="text-lg font-bold text-gray-900">
-                        Ticket: <span class="font-mono text-indigo-600" x-text="activeComplaint.ticket_number"></span>
-                    </h3>
-                    <button @click="openModal = false" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
-                </div>
-
-                <!-- Modal Body -->
-                <div class="py-4 space-y-3 text-sm text-gray-600">
-                    <div>
-                        <span class="font-semibold text-gray-700">Complainant Type: </span> 
-                        <span x-text="activeComplaint.complainant"></span>
-                    </div>
-                    <div>
-                        <span class="font-semibold text-gray-700">Category: </span> 
-                        <span x-text="activeComplaint.category ? activeComplaint.category.name : 'N/A'"></span>
-                    </div>
-                    <div>
-                        <span class="font-semibold text-gray-700">Sub Category: </span> 
-                        <span x-text="activeComplaint.subcategory ? activeComplaint.subcategory.name : 'N/A'"></span>
-                    </div>
-
-                    <!-- Hostel Details -->
-                    <template x-if="activeComplaint.complainant === 'Hostel Student'">
-                        <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 space-y-1">
-                            <div><span class="font-semibold text-gray-700">Hostel Name:</span> <span x-text="activeComplaint.hostel_name"></span></div>
-                            <div><span class="font-semibold text-gray-700">Room No:</span> <span x-text="activeComplaint.room_number"></span></div>
-                        </div>
-                    </template>
-                    <div>
-                        <span class="font-semibold text-gray-700">Location Specification: </span> 
-                        <span x-text="activeComplaint.location ? activeComplaint.location : 'N/A'"></span>
-                    </div>
-                    <div>
-                        <span class="font-semibold text-gray-700 block mb-1">Description:</span>
-                        <p class="bg-gray-50 p-3 rounded-xl border border-gray-100 text-gray-800" x-text="activeComplaint.description || 'No description provided.'"></p>
-                    </div>
-
-                    <div>
-                        <span class="font-semibold text-gray-700">Current Status: </span> 
-                        <span class="uppercase font-bold text-xs px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700" x-text="activeComplaint.status"></span>
-                    </div>
-                </div>
-
-                <!-- Modal Footer -->
-                <div class="pt-4 border-t border-gray-100 flex justify-end">
-                    <button @click="openModal = false" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl text-sm transition-colors">
-                        Close
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!-- ================= END MODAL ================= -->
+        <x-complaint-modal />
 
     </div>
 </x-app-layout>

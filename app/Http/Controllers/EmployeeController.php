@@ -21,7 +21,7 @@ class EmployeeController extends Controller
     }
     public function myComplaints(){
         $user = Auth::user();
-        $complaints = Complaint::with('category', 'assignedEmployee', 'subcategory')
+        $complaints = Complaint::with('user', 'category', 'assignedEmployee', 'subcategory')
                 ->where('user_id', $user->id)
                 ->latest()
                 ->paginate(10);

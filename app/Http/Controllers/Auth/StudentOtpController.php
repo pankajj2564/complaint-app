@@ -65,7 +65,7 @@ class StudentOtpController extends Controller
 
         // Session mein bhi email save karein
         session(['auth_login_email' => $user->email]);
-        session()->flash('debug_otp', $otp);
+        //session()->flash('debug_otp', $otp);
 
         return redirect()->route('student.verify.otp.form');
     }
