@@ -114,7 +114,7 @@
                                 <th class="py-3 px-6">Complainant</th>
                                 <th class="py-3 px-6">Category</th>
                                 <th class="py-3 px-6">Status</th>
-                                <th class="py-3 px-6 text-right">Action</th>
+                                <th class="py-3 px-6 text-right">Assigned</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 text-sm text-gray-600">
@@ -142,23 +142,13 @@
                                         </span>
                                     </td>
                                     <td class="py-4 px-6 text-right">
-                                        <!-- Form to quick-update status -->
-                                        <form action="{{ route('employee.complaints.update', $complaint->id) }}" method="POST" class="inline-flex items-center gap-2">
-                                            @csrf
-                                            @method('PATCH')
-                                            <select name="status" onchange="this.form.submit()" class="text-xs border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                                <option value="pending" {{ $complaint->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                                <option value="in_progress" {{ $complaint->status == 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                                                <option value="resolved" {{ $complaint->status == 'resolved' ? 'selected' : '' }}>Resolved</option>
-                                                <option value="closed" {{ $complaint->status == 'closed' ? 'selected' : '' }}>Closed</option>
-                                            </select>
-                                        </form>
+                                        {{ optional($complaint->assignedEmployee)->name ?? 'Unassigned' }}
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
                                     <td colspan="5" class="py-8 text-center text-gray-400 text-sm">
-                                        No complaints assigned to you yet.
+                                        No complaints found.
                                     </td>
                                 </tr>
                             @endforelse
