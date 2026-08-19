@@ -9,7 +9,7 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect('/login');
+    return redirect('/auth/login');
 })->name('home');
 
 // ==========================================
