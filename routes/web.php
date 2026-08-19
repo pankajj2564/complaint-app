@@ -89,3 +89,7 @@ Route::middleware('auth')->group(function () {
 
 // Laravel Default Auth Routes (For Admin Password Login)
 require __DIR__.'/auth.php';
+
+Route::fallback(function () {
+    abort(410);
+});

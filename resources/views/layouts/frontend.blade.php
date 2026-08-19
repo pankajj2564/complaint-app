@@ -4,42 +4,62 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-
-        <title>{{ config('app.name', 'CGC University Portal') }}</title>
-
-        <!-- Scripts & Styles (Vite) -->
+        
+        <meta name="robots" content="noindex, nofollow">
+        
+        <title>{{ config('app.name', 'Complaint Portal | CGC University Mohali') }}</title>
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.svg') }}">
+        <!-- Fonts & Tailwind CSS (Vite) -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased bg-gray-100">
+    <body class="bg-gray-50 font-sans antialiased text-gray-900">
         <div class="min-h-screen flex flex-col">
             
-            <!-- Frontend Specific Navbar -->
-            <header class="bg-white shadow-sm border-b border-gray-200 p-4">
-                <div class="max-w-7xl mx-auto flex justify-between items-center">
-                    <h1 class="font-bold text-lg text-indigo-600">CGC Student Portal</h1>
-                    <div>
-                        @auth
-                            <span class="text-sm text-gray-700 mr-4">Hello, {{ Auth::user()->name }}</span>
-                            <form method="POST" action="{{ route('logout') }}" class="inline">
-                                @csrf
-                                <button type="submit" class="text-sm text-red-600 font-semibold">Logout</button>
-                            </form>
-                        @else
-                            <a href="{{ route('login') }}" class="text-sm text-indigo-600 font-semibold">Login</a>
-                        @endauth
+            <!-- 1. TOP HEADER (Centralized Logo & Profile Menu) -->
+            <header class="bg-white border-b border-gray-200 h-24 fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 shadow-xs">
+                <!-- Centralized / Brand Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="rounded-xl flex items-center justify-center overflow-hidden ">
+                    <a href="{{ 
+                        Auth::check() 
+                            ? (Auth::user()->role == 'admin' 
+                                ? route('admin.dashboard') 
+                                : (Auth::user()->role == 'employee' 
+                                    ? route('employee.dashboard') 
+                                    : route('student.dashboard'))) 
+                            : url('/auth/login') 
+                    }}" class="flex items-center gap-2">
+                        <img src="{{ asset('UniversityLogo.svg') }}" {{ $attributes->merge(['class' => 'h-16 w-auto']) }} alt="Logo">
+                    </a>
                     </div>
+                    
+                </div>
+
+                <!-- Profile Related Menu (Dropdown / Auth info) -->
+                <div class="flex items-center gap-4">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
+                        <p class="text-xs text-indigo-600 font-medium capitalize">{{ Auth::user()->role }}</p>
+                    </div>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="px-3 py-1.5 bg-gray-100 hover:bg-red-50 hover:text-red-600 text-gray-600 text-xs font-semibold rounded-lg transition">
+                            Logout
+                        </button>
+                    </form>
                 </div>
             </header>
 
-            <!-- Main Dynamic Content -->
-            <main class="flex-grow max-w-7xl mx-auto w-full p-6">
-                {{ $slot }}
-            </main>
+            <!-- CONTAINER (Sidebar + Main Content) -->
+            <div class="flex pt-16 min-h-screen">
 
-            <!-- Footer -->
-            <footer class="bg-white border-t border-gray-200 text-center py-4 text-xs text-gray-500">
-                &copy; {{ date('Y') }} CGC University Mohali. All rights reserved.
-            </footer>
+                <!-- 3. MIDDLE CONTENT AREA -->
+                <main class="flex-1 md:ml-64 p-6 sm:p-8 bg-gray-50/50">
+                    {{ $slot }}
+                </main>
+
+            </div>
         </div>
     </body>
 </html>
