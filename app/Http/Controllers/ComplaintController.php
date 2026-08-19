@@ -37,6 +37,7 @@ class ComplaintController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'complainant' => 'required|string',
             'category_id' => 'required|exists:categories,id',
             'sub_category_id' => 'nullable|exists:sub_categories,id',
             'location' => 'required|string|max:255',
@@ -54,6 +55,7 @@ class ComplaintController extends Controller
             'sub_category_id' => $request->sub_category_id,
             'location' => $request->location,
             'description' => $request->description,
+            'complainant' => $request->complainant,
             'status' => 'pending',
         ]);
 

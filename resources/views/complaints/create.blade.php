@@ -30,6 +30,16 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                     <!-- Name -->
                     <div>
+                        <label class="block text-sm font-medium text-gray-700">Complainant</label>
+                        <select id="complainant" name="complainant" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" onchange="toggleHostelFields()">
+                            <option value="">-- Select Complainant First --</option>
+                            <option value="Day Scholar Student">Day Scholar Student</option>
+                            <option value="Hostel Student">Hostel Student</option>
+                            <option value="Staff/employee">Staff/employee</option>
+                        </select>
+                    </div>
+                    
+                    <div>
                         <label class="block text-sm font-medium text-gray-700">Full Name</label>
                         <input type="text" value="{{ $user->name }}" readonly 
                             class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 text-gray-600 shadow-sm">
@@ -86,16 +96,16 @@
                     </div>
 
                     <!-- Conditional Hosteller Details (If applicable based on profile) -->
-                    @if(optional($user->studentProfile)->student_type === 'Hostel' || optional($user->studentProfile)->hostel_name)
-                    <div>
+                    
+                    <div id="hostel_name_field" style="display: none;">
                         <label class="block text-sm font-medium text-gray-700">Hostel Name</label>
                         <input type="text" name="hostel_name" class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 text-gray-600 shadow-sm">
                     </div>
-                    <div>
+                    <div id="room_number_field" style="display: none;">
                         <label class="block text-sm font-medium text-gray-700">Room No</label>
                         <input type="text" name="room_number" class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 text-gray-600 shadow-sm">
                     </div>
-                    @endif
+                    
 
                 </div>
 
@@ -186,5 +196,19 @@
                     subCategorySelect.innerHTML = '<option value="">Error loading sub-categories</option>';
                 });
         });
+        function toggleHostelFields() {
+            const complainantSelect = document.getElementById('complainant');
+            const hostelNameField = document.getElementById('hostel_name_field');
+            const roomNumberField = document.getElementById('room_number_field');
+
+            // Check agar selected value "Hostel Student" hai
+            if (complainantSelect.value === 'Hostel Student') {
+                hostelNameField.style.display = 'block';
+                roomNumberField.style.display = 'block';
+            } else {
+                hostelNameField.style.display = 'none';
+                roomNumberField.style.display = 'none';
+            }
+        }
     </script>
 </x-app-layout>

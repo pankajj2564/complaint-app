@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('sub_category_id')->nullable()->constrained()->onDelete('set null');
             $table->text('location')->nullable(); // Required for maintenance
             $table->text('description');
+            $table->string('complainant')->nullable();
             $table->enum('status', ['pending', 'in_progress', 'resolved', 'closed'])->default('pending');
             $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null'); // Concerned person
             $table->timestamps();

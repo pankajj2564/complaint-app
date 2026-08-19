@@ -13,11 +13,24 @@ class EmployeeController extends Controller
     public function dashboard()
     {
         $complaints = Complaint::where('assigned_to', Auth::id())
-        ->with('user', 'category')
+        ->with('user', 'category', 'subcategory')
         ->latest()
         ->paginate(10);
             
         return view('employee.dashboard', compact('complaints'));
+    }
+    public function myComplaints(){
+        $user = Auth::user();
+        $complaints = Complaint::with('category', 'assignedEmployee', 'subcategory')
+                ->where('user_id', $user->id)
+                ->latest()
+                ->paginate(10);
+        $data["totalComplaints"] = Complaint::where('user_id', $user->id)->count();
+        $data["pendingComplaints"] = Complaint::where('user_id', $user->id)->where('status', 'pending')->count();
+        $data["inprogressComplaints"] = Complaint::where('user_id', $user->id)->where('status', 'in_progress')->count();
+        $data["resolvedComplaints"] = Complaint::where('user_id', $user->id)->where('status', 'resolved')->count();
+        $data["closedComplaints"] = Complaint::where('user_id', $user->id)->where('status', 'closed')->count();
+        return view('employee.mycomplaints', compact('complaints', 'data'));
     }
 
     public function updateStatus(Request $request, $id)

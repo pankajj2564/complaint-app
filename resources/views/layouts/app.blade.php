@@ -62,8 +62,11 @@
                             <a href="{{ route('employee.dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('employee.dashboard') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50' }}">
                                 📊 Dashboard
                             </a>                            
-                            <a href="{{ route('complaints.create') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50">
+                            <a href="{{ route('complaints.create') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('complaints.create') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50' }}">
                                 ➕ Raise Complaints
+                            </a>
+                            <a href="{{ route('employee.myComplaints') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('employee.myComplaints') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                                📁 My Complaints
                             </a>
                         @elseif(Auth::user()->role === 'admin')
                             <!-- Admin Sidebar Menus -->
@@ -90,9 +93,9 @@
                                 ➕ Raise Complaints
                             </a>
                         @endif
-                        <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('profile.edit') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                        <?php /* <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('profile.edit') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50' }}">
                             👥 Profile
-                        </a>
+                        </a> */ ?>
                     </div>
                 </aside>
 

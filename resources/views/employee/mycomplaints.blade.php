@@ -50,7 +50,7 @@
             <!-- Assigned Complaints Table Section -->
             <div class="bg-white shadow-sm rounded-2xl border border-gray-100 overflow-hidden">
                 <div class="px-6 py-5 border-b border-gray-100 flex justify-between items-center">
-                    <h3 class="font-bold text-gray-800">Assigned Complaints</h3>
+                    <h3 class="font-bold text-gray-800">My Complaints</h3>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -58,7 +58,6 @@
                         <thead>
                             <tr class="bg-gray-50/70 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
                                 <th class="py-3 px-6">Ticket No</th>
-                                <th class="py-3 px-6">Name</th>
                                 <th class="py-3 px-6">Complainant</th>
                                 <th class="py-3 px-6">Category</th>
                                 <th class="py-3 px-6">Status</th>
@@ -68,16 +67,13 @@
                         <tbody class="divide-y divide-gray-100 text-sm text-gray-600">
                             @forelse($complaints ?? [] as $complaint)
                                 <tr>
-                                    <!-- Ticket No (Clickable to open modal directly via Alpine) -->
+                                    <!-- Clickable Ticket Number to Open Modal -->
                                     <td class="py-4 px-6 font-mono font-medium text-indigo-600">
                                         <button type="button" 
                                             @click="activeComplaint = {{ json_encode($complaint) }}; openModal = true"
                                             class="hover:underline text-indigo-600 focus:outline-none">
                                             {{ $complaint->ticket_number }}
                                         </button>
-                                    </td>
-                                    <td class="py-4 px-6 font-medium text-gray-900">
-                                        {{ $complaint->complainant }}
                                     </td>
                                     <td class="py-4 px-6 font-medium text-gray-900">
                                         {{ optional($complaint->user)->name ?? 'Unknown' }} 
@@ -93,6 +89,7 @@
                                         </span>
                                     </td>
                                     <td class="py-4 px-6 text-right">
+                                        <!-- Form to quick-update status -->
                                         <form action="{{ route('employee.complaints.update', $complaint->id) }}" method="POST" class="inline-flex items-center gap-2">
                                             @csrf
                                             @method('PATCH')
@@ -115,7 +112,6 @@
                         </tbody>
                     </table>
                 </div>
-
                 <!-- Pagination Links Section -->
                 <div class="mt-4 px-6 py-4">
                     {{ $complaints->links() }}
@@ -155,7 +151,7 @@
                         <span x-text="activeComplaint.subcategory ? activeComplaint.subcategory.name : 'N/A'"></span>
                     </div>
 
-                    <!-- Hostel Details -->
+                    <!-- Hostel Details (Shows only if Complainant is Hostel Student) -->
                     <template x-if="activeComplaint.complainant === 'Hostel Student'">
                         <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 space-y-1">
                             <div><span class="font-semibold text-gray-700">Hostel Name:</span> <span x-text="activeComplaint.hostel_name"></span></div>

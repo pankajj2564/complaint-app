@@ -20,7 +20,7 @@ class AdminController extends Controller
         //$assignedComplaints = Complaint::whereNotNull('assigned_to')->count();
         //$resolvedComplaints = Complaint::whereIn('status', ['resolved', 'closed'])->count();
         
-        $data["complaints"] = Complaint::with('user', 'assignedEmployee', 'category')->latest()->paginate(10);
+        $data["complaints"] = Complaint::with('user', 'assignedEmployee', 'category', 'subcategory')->latest()->paginate(10);
 
         return view('admin.dashboard', compact('data'));
     }
@@ -28,7 +28,7 @@ class AdminController extends Controller
     public function complaints()
     {
         // get() ko paginate(10) se replace karein
-        $complaints = Complaint::with('user', 'assignedEmployee', 'category')->latest()->paginate(10); 
+        $complaints = Complaint::with('user', 'assignedEmployee', 'category', 'subcategory')->latest()->paginate(10); 
         
         $employees = User::where('role', 'employee')->where('status', 'active')->get();
 

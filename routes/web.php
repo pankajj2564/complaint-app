@@ -9,7 +9,7 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    //return redirect('/login');
+    return redirect('/login');
 })->name('home');
 
 // ==========================================
@@ -53,7 +53,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 // ==========================================
 Route::middleware(['auth', 'role:employee'])->prefix('employee')->name('employee.')->group(function () {
     Route::get('/dashboard', [EmployeeController::class, 'dashboard'])->name('dashboard');
-    
+    Route::get('/complaints', [EmployeeController::class, 'myComplaints'])->name('myComplaints');
     // Employee can update status of assigned complaints
     Route::patch('/complaints/{id}/status', [EmployeeController::class, 'updateStatus'])->name('complaints.update');
 });
@@ -70,7 +70,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:student,employee'])->group(function () {
         Route::get('/complaints/create', [ComplaintController::class, 'create'])->name('complaints.create');
         Route::post('/complaints', [ComplaintController::class, 'store'])->name('complaints.store');
-        Route::get('/my-complaints', [ComplaintController::class, 'myComplaints'])->name('complaints.my');
+        //Route::get('/my-complaints', [ComplaintController::class, 'myComplaints'])->name('complaints.my');
     });
 
     // Dynamic Sub-category AJAX endpoint (Accessible during complaint creation)

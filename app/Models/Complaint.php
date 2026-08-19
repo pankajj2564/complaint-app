@@ -13,6 +13,7 @@ class Complaint extends Model
         'sub_category_id',
         'location',
         'description',
+        'complainant',
         'status',
         'assigned_to',
     ];
