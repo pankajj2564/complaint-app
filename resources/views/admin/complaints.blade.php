@@ -132,6 +132,7 @@
                                 <th class="py-3 px-6">Submitted By</th>
                                 <th class="py-3 px-6">Category</th>
                                 <th class="py-3 px-6">Location</th>
+                                <th class="py-3 px-6">Image</th>
                                 <th class="py-3 px-6">Status</th>
                                 <th class="py-3 px-6">Assigned To</th>
                                 <th class="py-3 px-6">Date</th>
@@ -155,6 +156,11 @@
                                     </td>
                                     <td class="py-4 px-6 text-gray-500">{{ optional($complaint->category)->name ?? 'N/A' }}</td>
                                     <td class="py-4 px-6 text-gray-500">{{ $complaint->location ?? 'N/A' }}</td>
+                                    <td class="py-4 px-6 text-gray-500">
+                                        @if($complaint->image)
+                                        <img src="{{ asset($complaint->image) }}" alt="Complaint Image" class="w-16 h-auto rounded aspect-square">
+                                        @endif
+                                    </td>
                                     <td class="py-4 px-6 text-gray-500">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $complaint->status == 'pending' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' }}">
                                             {{ ucfirst($complaint->status) }}

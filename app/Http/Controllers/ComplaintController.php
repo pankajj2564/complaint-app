@@ -42,10 +42,22 @@ class ComplaintController extends Controller
             'sub_category_id' => 'nullable|exists:sub_categories,id',
             'location' => 'required|string|max:255',
             'description' => 'required|string',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         // 1. Logged-in user ki details lein
         $user = Auth::user();
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            
+            // Image public/uploads/complaints folder me move hogi
+            $file->move(public_path('uploads/complaints'), $filename);
+            
+            // DB meRelative Path Save Hoga
+            $imagePath = 'uploads/complaints/' . $filename;
+        }
 
         // 2. Complaint create karein
         $complaint = Complaint::create([
@@ -56,6 +68,7 @@ class ComplaintController extends Controller
             'location' => $request->location,
             'description' => $request->description,
             'complainant' => $request->complainant,
+            'image'       => $imagePath,
             'status' => 'pending',
         ]);
 

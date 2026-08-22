@@ -113,6 +113,7 @@
                                 <th class="py-3 px-6">Ticket No</th>
                                 <th class="py-3 px-6">Complainant</th>
                                 <th class="py-3 px-6">Category</th>
+                                <th class="py-3 px-6">Image</th>
                                 <th class="py-3 px-6">Status</th>
                                 <th class="py-3 px-6 text-right">Assigned</th>
                             </tr>
@@ -133,6 +134,11 @@
                                         <span class="block text-xs text-gray-400">{{ optional($complaint->user)->role }}</span>
                                     </td>
                                     <td class="py-4 px-6">{{ optional($complaint->category)->name ?? 'N/A' }}</td>
+                                    <td class="py-4 px-6 text-gray-500">
+                                        @if($complaint->image)
+                                        <img src="{{ asset($complaint->image) }}" alt="Complaint Image" class="w-16 h-auto rounded aspect-square">
+                                        @endif
+                                    </td>
                                     <td class="py-4 px-6">
                                         <span class="px-2.5 py-1 text-xs font-semibold rounded-full 
                                             @if($complaint->status === 'pending') bg-amber-50 text-amber-700 

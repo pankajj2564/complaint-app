@@ -9,6 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Attachment;
 
 class ComplaintSubmittedMail extends Mailable
 {
@@ -44,6 +45,14 @@ class ComplaintSubmittedMail extends Mailable
 
     public function attachments(): array
     {
+        // 2. Check karein ki image DB me saved hai or file physically exist karti hai
+        if ($this->complaint->image && file_exists(public_path($this->complaint->image))) {
+            return [
+                Attachment::fromPath(public_path($this->complaint->image))
+                    ->as('complaint-attachment.' . pathinfo($this->complaint->image, PATHINFO_EXTENSION))
+            ];
+        }
+
         return [];
     }
 }

@@ -23,7 +23,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('complaints.store') }}" method="POST">
+            <form action="{{ route('complaints.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <!-- Basic Details Grid -->
@@ -149,6 +149,12 @@
                     <label class="block text-sm font-medium text-gray-700">Detail of Issue <span class="text-red-500">*</span></label>
                     <textarea name="description" rows="4" placeholder="Describe your issue clearly..." required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"></textarea>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700">Upload Image / Photo (Optional)</label>
+                    <input type="file" name="image" id="image" accept="image/jpeg,image/png,image/jpg"
+                        class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+                    <p class="mt-1 text-xs text-gray-500">Formats allowed: JPG, PNG, JPEG. Maximum size: 2MB.</p>
                 </div>
 
                 <!-- Submit Button -->

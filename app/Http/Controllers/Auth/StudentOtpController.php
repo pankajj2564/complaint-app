@@ -27,10 +27,12 @@ class StudentOtpController extends Controller
         // User dhoondhein
         $user = User::where('email', $input)
             ->orWhereHas('studentProfile', function($q) use ($input) {
-                $q->where('roll_number', $input)->orWhere('gr_number', $input);
+                $q->where('roll_number', $input)->orWhere('gr_number', $input)
+                ->orWhere('phone_number', $input);
             })
             ->orWhereHas('employeeProfile', function($q) use ($input) {
-                $q->where('employee_code', $input);
+                $q->where('employee_code', $input)
+                ->orWhere('phone_number', $input);
             })
             ->first();
 

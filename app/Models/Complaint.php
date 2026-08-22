@@ -16,6 +16,7 @@ class Complaint extends Model
         'complainant',
         'status',
         'assigned_to',
+        'image'
     ];
 
     // Jis student/employee ne complaint raise ki hai
